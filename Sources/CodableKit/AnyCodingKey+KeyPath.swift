@@ -33,7 +33,10 @@ extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
 
 extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
     
-    public func nestedContainer(forKey key: Key, useKeyPath: Bool = true) throws -> KeyedDecodingContainer<AnyCodingKey> {
+    public func nestedContainer(
+        forKey key: Key,
+        useKeyPath: Bool = true
+    ) throws -> KeyedDecodingContainer<AnyCodingKey> {
         if !useKeyPath {
             return try self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         }
@@ -69,7 +72,6 @@ extension KeyedEncodingContainerProtocol where Key == AnyCodingKey {
         return container
     }
 }
-
 
 extension AnyCodingKey {
 
