@@ -2,8 +2,9 @@ language: swift
 osx_image: xcode10.1
 
 before_script:
-  - swift package generate-xcodeproj --enable-code-coverage
+  - bundle exec danger
 script:
+  - swift package generate-xcodeproj --enable-code-coverage
   - xcodebuild test -scheme CodableKit-Package
 after_success:
   - bash <(curl -s https://codecov.io/bash)
