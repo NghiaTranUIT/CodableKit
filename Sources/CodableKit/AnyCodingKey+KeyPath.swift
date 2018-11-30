@@ -1,14 +1,11 @@
 //
-//  AnyCodingKey+Keypath.swift
+//  AnyCodingKey+KeyPath.swift
 //  CodableKit
 //
 //  Created by leave on 2018/11/27.
 //
 
-import Foundation
-
 extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
-    
     /// Decodes a value of the given type for the given key, without specific type.
     ///
     /// Keypath is supported: e.g. `value1 = try container.decode("b0.b1.value")`
@@ -32,15 +29,17 @@ extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
 }
 
 extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
-    
-    public func nestedContainer(forKey key: Key, useKeyPath: Bool = true) throws -> KeyedDecodingContainer<AnyCodingKey> {
+    public func nestedContainer(
+        forKey key: Key,
+        useKeyPath: Bool = true
+    ) throws -> KeyedDecodingContainer<AnyCodingKey> {
         if !useKeyPath {
             return try self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         }
         return try nestedContainer(for: key.keyPaths())
     }
-    
-    fileprivate func nestedContainer(for keyPaths:[Key]) throws -> KeyedDecodingContainer<AnyCodingKey> {
+
+    fileprivate func nestedContainer(for keyPaths: [Key]) throws -> KeyedDecodingContainer<AnyCodingKey> {
         assert(keyPaths.count > 0)
         var container = try self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: keyPaths[0])
         for path in keyPaths[1..<keyPaths.count] {
@@ -48,18 +47,19 @@ extension KeyedDecodingContainerProtocol where Key == AnyCodingKey {
         }
         return container
     }
-    
 }
 
 extension KeyedEncodingContainerProtocol where Key == AnyCodingKey {
-    
-    public mutating func nestedContainer(forKey key: Key, useKeyPath: Bool = true) -> KeyedEncodingContainer<AnyCodingKey> {
+    public mutating func nestedContainer(
+        forKey key: Key,
+        useKeyPath: Bool = true
+    ) -> KeyedEncodingContainer<AnyCodingKey> {
         if !useKeyPath {
             return nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         }
         return nestedContainer(for: key.keyPaths())
     }
-    
+
     fileprivate mutating func nestedContainer(for keyPaths: [Key]) -> KeyedEncodingContainer<AnyCodingKey> {
         assert(keyPaths.count > 0)
         var container = self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: keyPaths[0])
@@ -70,9 +70,7 @@ extension KeyedEncodingContainerProtocol where Key == AnyCodingKey {
     }
 }
 
-
 extension AnyCodingKey {
-
     /// Split the Key by "."
     fileprivate func keyPaths() -> [AnyCodingKey] {
         let keys = stringValue.components(separatedBy: ".").map( AnyCodingKey.init(stringValue:) )
