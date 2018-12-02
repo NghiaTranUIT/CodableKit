@@ -11,10 +11,10 @@ import Foundation
 ///
 /// [https://json.org](https://json.org)
 public enum JSON: Equatable {
-    case string(String)
-    case number(NSNumber)
     case object([String: JSON])
     case array([JSON])
+    case number(NSNumber)
+    case string(String)
     case `true`
     case `false`
     case null
