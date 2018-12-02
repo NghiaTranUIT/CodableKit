@@ -22,87 +22,84 @@ public enum JSON: Equatable {
 
 // MARK: - Initializers
 
-extension NSNumber {
-    fileprivate static let boolType = type(of: NSNumber(value: true))
-}
-
 extension JSON {
-    public init(_ string: String) { self = .string(string) }
-    public init(_ number: Int) { self = .number(number as NSNumber) }
-    public init(_ number: Int8) { self = .number(number as NSNumber) }
-    public init(_ number: Int16) { self = .number(number as NSNumber) }
-    public init(_ number: Int32) { self = .number(number as NSNumber) }
-    public init(_ number: Int64) { self = .number(number as NSNumber) }
-    public init(_ number: UInt) { self = .number(number as NSNumber) }
-    public init(_ number: UInt8) { self = .number(number as NSNumber) }
-    public init(_ number: UInt16) { self = .number(number as NSNumber) }
-    public init(_ number: UInt32) { self = .number(number as NSNumber) }
-    public init(_ number: UInt64) { self = .number(number as NSNumber) }
-    public init(_ number: Float) { self = .number(number as NSNumber) }
-    public init(_ number: Double) { self = .number(number as NSNumber) }
+    public init(_ object: [String: JSON]) { self = .object(object) }
+
+    public init?(_ dictionary: [String: Any]) {
+        var object: [String: JSON] = [:]
+        for (key, value) in dictionary {
+            guard let json = JSON(value) else {
+                return nil
+            }
+            object[key] = json
+        }
+        self.init(object)
+    }
+
+    public init(_ array: [JSON]) { self = .array(array) }
+
+    public init?(_ array: [Any]) {
+        var jsonArray: [JSON] = []
+        for element in array {
+            guard let json = JSON(element) else {
+                return nil
+            }
+            jsonArray.append(json)
+        }
+        self.init(jsonArray)
+    }
 
     public init(_ number: NSNumber) {
-        if type(of: number) == NSNumber.boolType {
+        if type(of: number) == NSNumber.typeOfBooleanNumber {
             self.init(number.boolValue)
         } else {
             self = .number(number)
         }
     }
 
-    public init(_ object: [String: JSON]) { self = .object(object) }
-    public init(_ array: [JSON]) { self = .array(array) }
+    public init(_ value: Int) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Int8) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Int16) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Int32) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Int64) { self = .number(NSNumber(value: value)) }
+    public init(_ value: UInt) { self = .number(NSNumber(value: value)) }
+    public init(_ value: UInt8) { self = .number(NSNumber(value: value)) }
+    public init(_ value: UInt16) { self = .number(NSNumber(value: value)) }
+    public init(_ value: UInt32) { self = .number(NSNumber(value: value)) }
+    public init(_ value: UInt64) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Double) { self = .number(NSNumber(value: value)) }
+    public init(_ value: Float) { self = .number(NSNumber(value: value)) }
+
+    public init(_ string: String) { self = .string(string) }
+
     public init(_ bool: Bool) { self = bool ? .true : . false }
+
     public init(_ null: NSNull) { self = .null }
 
-    public init?(_ rawObject: [String: Any]) {
-        var object: [String: JSON] = [:]
-        for (key, value) in rawObject {
-            guard let json = JSON(value) else {
-                return nil
-            }
-            object[key] = json
-        }
-        self = .object(object)
-    }
-
-    public init?(_ rawArray: [Any]) {
-        var array: [JSON] = []
-        for element in rawArray {
-            guard let json = JSON(element) else {
-                return nil
-            }
-            array.append(json)
-        }
-        self = .array(array)
-    }
-
-    public init?(_ any: Any) {
-        switch any {
-        case let string as String: self.init(string)
-        case let number as NSNumber: self.init(number)
-        case let object as [String: JSON]: self.init(object)
-        case let rawObject as [String: Any]: self.init(rawObject)
-        case let array as [JSON]: self.init(array)
-        case let rawArray as [Any]: self.init(rawArray)
-        case let null as NSNull: self.init(null)
+    public init?(_ value: Any) {
+        switch value {
+        case let object as [String: JSON]:
+            self.init(object)
+        case let dictionary as [String: Any]:
+            self.init(dictionary)
+        case let array as [JSON]:
+            self.init(array)
+        case let array as [Any]:
+            self.init(array)
+        case let number as NSNumber:
+            self.init(number)
+        case let string as String:
+            self.init(string)
+        case let null as NSNull:
+            self.init(null)
         default:
-            let mirror = Mirror(reflecting: any)
-            guard
-                mirror.displayStyle == .optional,
-                mirror.children.isEmpty
-                else {
-                    return nil
-            }
-            self = .null
-        }
-    }
-
-    public init?(_ any: Any?) {
-        guard let any = any else {
             return nil
         }
-        self.init(any)
     }
+}
+
+extension NSNumber {
+    fileprivate static let typeOfBooleanNumber = type(of: NSNumber(value: true))
 }
 
 // MARK: - Literals
