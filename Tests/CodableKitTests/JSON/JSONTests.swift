@@ -10,10 +10,18 @@ import XCTest
 
 final class JSONTests: XCTestCase {
     func testInitializers() {
-        let string = "string"
-        let object: [String: JSON] = [string: .string(string)]
-        let array: [JSON] = [.string(string), .object(object)]
-        XCTAssertEqual(JSON(string), .string(string))
+        let object: [String: JSON] = ["null": .null]
+        let dictionary: [String: Any] = ["null": NSNull()]
+        let array: [JSON] = [.null]
+
+        XCTAssertEqual(JSON(object), .object(object))
+        XCTAssertNil(JSON(["nsobject": NSObject()]))
+        XCTAssertEqual(JSON(dictionary), .object(object))
+        XCTAssertEqual(JSON(array), .array(array))
+        XCTAssertNil(JSON([NSObject()]))
+        XCTAssertEqual(JSON([NSNull()]), .array(array))
+        XCTAssertEqual(JSON(NSNumber(value: true)), .true)
+        XCTAssertEqual(JSON(NSNumber(value: 42)), .number(42))
         XCTAssertEqual(JSON(42 as Int), .number(42))
         XCTAssertEqual(JSON(42 as Int8), .number(42))
         XCTAssertEqual(JSON(42 as Int16), .number(42))
@@ -24,25 +32,17 @@ final class JSONTests: XCTestCase {
         XCTAssertEqual(JSON(42 as UInt16), .number(42))
         XCTAssertEqual(JSON(42 as UInt32), .number(42))
         XCTAssertEqual(JSON(42 as UInt64), .number(42))
-        XCTAssertEqual(JSON(42 as Float), .number(42))
         XCTAssertEqual(JSON(42 as Double), .number(42))
-        XCTAssertEqual(JSON(NSNumber(value: true)), .true)
-        XCTAssertEqual(JSON(NSNumber(value: false)), .false)
-        XCTAssertEqual(JSON(NSNumber(value: 1)), .number(1))
-        XCTAssertEqual(JSON(NSNumber(value: 0)), .number(0))
-        XCTAssertEqual(JSON(object), .object(object))
-        XCTAssertEqual(JSON(array), .array(array))
+        XCTAssertEqual(JSON(42 as Float), .number(42))
+        XCTAssertEqual(JSON("string"), .string("string"))
+        XCTAssertEqual(JSON(true), .true)
+        XCTAssertEqual(JSON(false), .false)
         XCTAssertEqual(JSON(NSNull()), .null)
-        XCTAssertNil(JSON([string: NSObject()]))
-        XCTAssertEqual(JSON([string: string]), .object(object))
-        XCTAssertNil(JSON([NSObject()]))
-        XCTAssertEqual(JSON([string, [string: string]]), .array(array))
-        XCTAssertEqual(JSON(NSNumber(value: 42) as Any), .number(42))
         XCTAssertEqual(JSON(object as Any), .object(object))
+        XCTAssertEqual(JSON(dictionary as Any), .object(object))
         XCTAssertEqual(JSON(array as Any), .array(array))
-        XCTAssertEqual(JSON(NSNull() as Any), .null)
-        XCTAssertEqual(JSON(Optional<Any>.none as Any), .null)
-        XCTAssertNil(JSON(nil as Any?))
+        XCTAssertEqual(JSON(42 as Any), .number(42))
+        XCTAssertEqual(JSON("string" as Any), .string("string"))
     }
 
     func testLiterals() {
