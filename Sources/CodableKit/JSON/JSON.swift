@@ -125,21 +125,12 @@ extension JSON {
 // MARK: - Properties
 
 extension JSON {
-    public var string: String? {
+    public var isObject: Bool {
         switch self {
-        case .string(let string):
-            return string
+        case .object:
+            return true
         default:
-            return nil
-        }
-    }
-
-    public var number: NSNumber? {
-        switch self {
-        case .number(let number):
-            return number
-        default:
-            return nil
+            return false
         }
     }
 
@@ -152,6 +143,15 @@ extension JSON {
         }
     }
 
+    public var isArray: Bool {
+        switch self {
+        case .array:
+            return true
+        default:
+            return false
+        }
+    }
+
     public var array: [JSON]? {
         switch self {
         case .array(let array):
@@ -161,14 +161,57 @@ extension JSON {
         }
     }
 
-    public var bool: Bool? {
+    public var isNumber: Bool {
+        switch self {
+        case .number:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var number: NSNumber? {
+        switch self {
+        case .number(let number):
+            return number
+        default:
+            return nil
+        }
+    }
+
+    public var isString: Bool {
+        switch self {
+        case .string:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var string: String? {
+        switch self {
+        case .string(let string):
+            return string
+        default:
+            return nil
+        }
+    }
+
+    public var isTrue: Bool {
         switch self {
         case .true:
             return true
-        case .false:
-            return false
         default:
-            return nil
+            return false
+        }
+    }
+
+    public var isFalse: Bool {
+        switch self {
+        case .false:
+            return true
+        default:
+            return false
         }
     }
 
@@ -185,30 +228,12 @@ extension JSON {
 // MARK: - Subscripts
 
 extension JSON {
-    public var isObject: Bool {
-        switch self {
-        case .object:
-            return true
-        default:
-            return false
-        }
-    }
-
     public subscript(key: String) -> JSON? {
         switch self {
         case .object(let object):
             return object[key]
         default:
             return nil
-        }
-    }
-
-    public var isArray: Bool {
-        switch self {
-        case .array:
-            return true
-        default:
-            return false
         }
     }
 

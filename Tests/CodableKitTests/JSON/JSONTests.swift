@@ -57,43 +57,117 @@ final class JSONTests: XCTestCase {
     }
 
     func testProperties() {
-        let string = "string"
-        let number: NSNumber = 42
         do {
-            let json = JSON(string)
-            XCTAssertEqual(json.string, string)
-        }
-        do {
-            let json = JSON(number)
-            XCTAssertEqual(json.number, number)
+            let json: JSON = ["null": nil]
+
+            XCTAssertTrue(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isFalse)
+            XCTAssertFalse(json.isNull)
+
+            XCTAssertEqual(json.object, ["null": nil])
+            XCTAssertNil(json.array)
+            XCTAssertNil(json.number)
             XCTAssertNil(json.string)
         }
         do {
-            let object = [string: JSON(number)]
-            let json = JSON(object)
-            XCTAssertEqual(json.object, object)
+            let json: JSON = [nil]
+
+            XCTAssertTrue(json.isArray)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isFalse)
+            XCTAssertFalse(json.isNull)
+
+            XCTAssertEqual(json.array, [nil])
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.number)
+            XCTAssertNil(json.string)
+        }
+        do {
+            let json: JSON = 42
+
+            XCTAssertTrue(json.isNumber)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isFalse)
+            XCTAssertFalse(json.isNull)
+
+            XCTAssertEqual(json.number, 42)
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.array)
+            XCTAssertNil(json.string)
+        }
+        do {
+            let json: JSON = "string"
+
+            XCTAssertTrue(json.isString)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isFalse)
+            XCTAssertFalse(json.isNull)
+
+            XCTAssertEqual(json.string, "string")
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.array)
             XCTAssertNil(json.number)
         }
         do {
-            let array = [JSON(string), JSON(number)]
-            let json = JSON(array)
-            XCTAssertEqual(json.array, array)
-            XCTAssertNil(json.object)
-        }
-        do {
-            let json = JSON.true
-            XCTAssertEqual(json.bool, true)
-            XCTAssertNil(json.array)
-        }
-        do {
-            let json = JSON.false
-            XCTAssertEqual(json.bool, false)
+            let json: JSON = true
+
+            XCTAssertTrue(json.isTrue)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isFalse)
             XCTAssertFalse(json.isNull)
+
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.array)
+            XCTAssertNil(json.number)
+            XCTAssertNil(json.string)
         }
         do {
-            let json = JSON.null
+            let json: JSON = false
+
+            XCTAssertTrue(json.isFalse)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isNull)
+
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.array)
+            XCTAssertNil(json.number)
+            XCTAssertNil(json.string)
+        }
+        do {
+            let json: JSON = nil
+
             XCTAssertTrue(json.isNull)
-            XCTAssertNil(json.bool)
+            XCTAssertFalse(json.isObject)
+            XCTAssertFalse(json.isArray)
+            XCTAssertFalse(json.isNumber)
+            XCTAssertFalse(json.isString)
+            XCTAssertFalse(json.isTrue)
+            XCTAssertFalse(json.isFalse)
+
+            XCTAssertNil(json.object)
+            XCTAssertNil(json.array)
+            XCTAssertNil(json.number)
+            XCTAssertNil(json.string)
         }
     }
 
