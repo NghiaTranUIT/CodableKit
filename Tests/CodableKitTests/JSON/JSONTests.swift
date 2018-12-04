@@ -46,11 +46,11 @@ final class JSONTests: XCTestCase {
     }
 
     func testLiterals() {
-        XCTAssertEqual(JSON.string("string"), "string")
-        XCTAssertEqual(JSON.number(42), 42)
-        XCTAssertEqual(JSON.number(42), 42.0)
         XCTAssertEqual(JSON.object(["key": "value"]), ["key": "value"])
         XCTAssertEqual(JSON.array([42]), [42])
+        XCTAssertEqual(JSON.number(42), 42)
+        XCTAssertEqual(JSON.number(42), 42.0)
+        XCTAssertEqual(JSON.string("string"), "string")
         XCTAssertEqual(JSON.true, true)
         XCTAssertEqual(JSON.false, false)
         XCTAssertEqual(JSON.null, nil)

@@ -104,20 +104,20 @@ extension NSNumber {
 
 // MARK: - Literals
 
-extension JSON: ExpressibleByStringLiteral {}
-extension JSON: ExpressibleByIntegerLiteral {}
-extension JSON: ExpressibleByFloatLiteral {}
 extension JSON: ExpressibleByDictionaryLiteral {}
 extension JSON: ExpressibleByArrayLiteral {}
+extension JSON: ExpressibleByIntegerLiteral {}
+extension JSON: ExpressibleByFloatLiteral {}
+extension JSON: ExpressibleByStringLiteral {}
 extension JSON: ExpressibleByBooleanLiteral {}
 extension JSON: ExpressibleByNilLiteral {}
 
 extension JSON {
-    public init(stringLiteral value: String) { self.init(value) }
-    public init(integerLiteral value: Int) { self.init(value) }
-    public init(floatLiteral value: Double) { self.init(value) }
     public init(dictionaryLiteral elements: (String, JSON)...) { self.init(Dictionary(uniqueKeysWithValues: elements)) }
     public init(arrayLiteral elements: JSON...) { self.init(elements) }
+    public init(integerLiteral value: Int) { self.init(value) }
+    public init(floatLiteral value: Double) { self.init(value) }
+    public init(stringLiteral value: String) { self.init(value) }
     public init(booleanLiteral value: Bool) { self.init(value) }
     public init(nilLiteral: ()) { self = .null }
 }
